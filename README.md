@@ -1,2 +1,2 @@
 # money_printer.py
-Python program that follows the Anti-Martingale betting strategy on coin flips and creates a file with interesting statistics.
+This Python program follows the Anti-Martingale betting strategy which says that if you win a round you should double your next bet and if you lose a round you should halve your next bet. It takes a series of coin flips and doubles or halves it's previous bet depending on whether it guessed the coin flip correctly or not. It then creates a file with some interesting statistics such as average ending bet, average winnings, and the amount of times busted (total funds below min bet). 
