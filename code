@@ -1,0 +1,90 @@
+#!/usr/bin/python3 
+
+import random
+
+starting_amount = 1000
+min_bet = starting_amount * .05
+
+def calculate_bet(current_amount, last_bet, hit):
+    if hit:
+        return last_bet * 2 if last_bet > 0 else current_amount * 0.05
+    else:
+        return max(current_amount * 0.025, min_bet)
+
+def coin_flip(num):
+    total_amount = starting_amount
+    last_bet = 0
+    num_hits = 0
+    bust = False
+    for i in range(num):
+        flip = random.randint(1, 2)
+        guess = random.randint(1, 2)
+
+        if guess == flip:
+            hit = True
+            num_hits += 1
+        else:
+            hit = False
+
+        bet_amount = calculate_bet(total_amount, last_bet, hit)
+        last_bet = bet_amount
+        total_amount += bet_amount if hit else -bet_amount
+        
+        if total_amount < min_bet:
+            bust = True
+            break
+        elif hit:
+            total_amount += bet_amount
+        else:
+            total_amount -= bet_amount
+
+        
+            
+
+    return num_hits, last_bet, total_amount, bust
+
+def main(num_flips, num_runs):
+    with open('coin_flip_stats.txt', 'w') as file:
+        total_hits = 0
+        total_final_bet = 0
+        total_final_amount = 0
+        total_bust = 0
+        max_hits = 0
+        max_final_bet = 0
+        max_final_amount = 0
+
+        for run in range(num_runs):
+            hits, final_bet, final_amount, bust = coin_flip(num_flips)
+            total_hits += hits
+            total_final_bet += final_bet
+            total_final_amount += final_amount
+            if bust == True:
+                total_bust += 1
+
+            max_hits = max(max_hits, hits)
+            max_final_bet = max(max_final_bet, final_bet)
+            max_final_amount = max(max_final_amount, final_amount)
+
+            file.write(f"Run {run+1}: \n")
+            file.write(f"Number of hits: {hits}\n")
+            file.write(f"Final bet amount: {final_bet}\n")
+            file.write(f"Final ending amount: {final_amount}\n\n")
+            if bust == True:
+                file.write("Bust!\n\n")
+
+        avg_hits = total_hits / num_runs
+        avg_final_bet = total_final_bet / num_runs
+        avg_final_amount = total_final_amount / num_runs
+
+        file.write("Total Averages:\n")
+        file.write(f"Average number of hits: {avg_hits}\n")
+        file.write(f"Average final bet amount: {avg_final_bet}\n")
+        file.write(f"Average final ending amount: {avg_final_amount}\n")
+        file.write(f"Times busted: {total_bust}\n\n")
+
+        file.write("Highest Values:\n")
+        file.write(f"Highest number of hits: {max_hits}\n")
+        file.write(f"Highest final bet amount: {max_final_bet}\n")
+        file.write(f"Highest final ending amount: {max_final_amount}\n")
+
+main(50, 1000)
