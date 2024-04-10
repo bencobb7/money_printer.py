@@ -87,4 +87,4 @@ def main(num_flips, num_runs):
         file.write(f"Highest final bet amount: {max_final_bet}\n")
         file.write(f"Highest final ending amount: {max_final_amount}\n")
 
-main(50, 1000)
+main(1000, 1000)
